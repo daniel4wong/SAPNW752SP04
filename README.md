@@ -1,7 +1,7 @@
 Introduction
 ============
 The openSUSE Leap 15.1 Vagrant box can be used to create a VirtualBox instance with Vagrant to install [SAP NW AS ABAP 752 SP04 Developer Edition](https://blogs.sap.com/2019/07/01/as-abap-752-sp04-developer-edition-to-download/) .
- 
+
  All recommended system preparations are done by packer and vagrant, as described at [Installing ABAP AS on Oracle VirtualBox](https://www.sap.com/documents/2019/09/32638f18-687d-0010-87a3-c30de2ffd8ff.html).
 
  The pre-built Vagrant Box is now avaiable on HashiCorps Vagrant Cloud:
@@ -16,13 +16,13 @@ The openSUSE Leap 15.1 Vagrant box can be used to create a VirtualBox instance w
  - gnome.sh => installes the Gnome Desktop, FireFox, VSCode, Chromium, Gnome-Terminal, GVim, Libreoffice, Nautilus Explorer, YAST2 and JAVA SAP Machine 11 + OpenJFX (to get ready to install SAPGUI JAVA)
  - sapinst.sh (+install_nw_expect) => installes the SAP NW AS ABAP 7.52 SP04 – Developer Edition is the installation files are avaiable in the `./sapint` folder
  - autostart.sh => appends the appends the `"Autostart = 1"` to the DEFAULT.PFL profile file.
- 
+
 Prerequisites
 =============
- 
+
 On OS X VirtualBox and Vagrant, is available via [Homebrew](http://brew.sh/) on Windows via [Chocolatey](https://chocolatey.org).
 
-OS X: 
+OS X:
 ```
 $ brew install virtualbox
 $ brew install vagrant
@@ -31,10 +31,19 @@ optional:
 ```
 $ brew install vagrant-manager
 ```
- 
+
+My version:
+`vboxmanage --version`
+- 6.1.14r140239
+`vagrant -v`
+- Vagrant 2.2.10
+
+** prevent installing vagrant-winnfsd plugin
+- https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/issues/57
+
 Usage
 =====
-Clone the reporitory [wechris/SAPNW752SP04](https://github.com/wechris/SAPNW752SP04). 
+Clone the reporitory [wechris/SAPNW752SP04](https://github.com/wechris/SAPNW752SP04).
 
 Download and extract the [TD752SP04.partXX.rar](https://developers.sap.com/trials-downloads.html) files to the folder: *./sapinst*
 
@@ -185,7 +194,7 @@ Optional
 
 The Packer template to build the openSUSE Leap 15.1 Vagrant box is available [here](https://github.com/wechris/SAPNW752SP04/tree/master/packer/openSUSE-Leap-15.1)
 
-**Packer** 
+**Packer**
 ```
 cd packer
 cd openSUSE-15.1

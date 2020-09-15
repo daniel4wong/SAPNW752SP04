@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
-spawn /vagrant/sapinst/install.sh
+spawn sudo bash /vagrant/sapinst/install.sh
 set PASSWORD "Down1oad"
 set timeout -1
 expect "Do you agree to the above license terms? yes/no:"

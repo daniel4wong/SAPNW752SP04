@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "wechris/OpenSUSE-15.1_sapnw752"
   config.vm.hostname = "vhcalnplci"
   config.vm.box_version = "1.0.0"
-  
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -28,45 +28,53 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-   config.vm.network "forwarded_port", guest: 8000, host: 8000, id: "http", auto_correct: true
-   config.vm.network "forwarded_port", guest: 44300, host: 44300, id: "https", auto_correct: true
-   config.vm.network "forwarded_port", guest: 3300, host: 3300, id: "rfc", auto_correct: true
-   config.vm.network "forwarded_port", guest: 3200, host: 3200, id: "sapgui", auto_correct: true
-   config.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", auto_correct: true
-   #config.vm.network "forwarded_port", guest: 3306, host: 3603
+  config.vm.network "forwarded_port", guest: 8000, host: 8000, id: "http", auto_correct: true
+  config.vm.network "forwarded_port", guest: 44300, host: 44300, id: "https", auto_correct: true
+  config.vm.network "forwarded_port", guest: 3300, host: 3300, id: "rfc", auto_correct: true
+  config.vm.network "forwarded_port", guest: 3200, host: 3200, id: "sapgui", auto_correct: true
+  config.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", auto_correct: true
+  # config.vm.network "forwarded_port", guest: 3306, host: 3603
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
-  
+  # config.vm.network "private_network", ip: "192.168.20.100"
+
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
   # config.vm.network "public_network"
-   
+  #config.vm.network "public_network", ip: "192.168.30.200", bridge: "en0: Wi-Fi (Wireless)"
+
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "", "/vagrant", :owner => "vagrant"
+  config.vm.synced_folder "", "/vagrant"
+  # config.vm.synced_folder "install", "/home/vagrant/link_install", :nfs => { :mount_options => ["mfsymlinks"] }
+  # config.vm.synced_folder "sapinst", "/vagrant/sapinst", :owner => "vagrant"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-   config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb|
      # Customize the amount of memory on the VM:
     vb.name = "SAPNetWeaver7.52SP04"
-    vb.gui = true
+    vb.gui = false
     vb.linked_clone = true
-    
+
     # Use VBoxManage to customize the VM. For example to change memory:
     vb.customize ["modifyvm", :id, "--memory", "8192", "--cpus", "2"]
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
     vb.customize ["modifyvm", :id, "--vram", "32"]
-   end
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+  end
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    # config.vbguest.auto_update = false
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -81,19 +89,19 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get install -y expect
+    zypper --non-interactive install mdadm
+  SHELL
 
   # Installations###
   # Comment the line to not to install some tool. ###
   # These tools are not optional. They are used by the others installations scripts.
   config.vm.provision "shell", path: "install/uuidd.sh"
-  
-  config.vm.provision "shell", path: "install/changetogerman.sh"
-  
-  config.vm.provision "shell", path: "install/gnome.sh"
+
+  # config.vm.provision "shell", path: "install/changetogerman.sh"
+
+  # config.vm.provision "shell", path: "install/gnome.sh"
 
   config.vm.provision "shell", path: "install/sapinst.sh"
 
