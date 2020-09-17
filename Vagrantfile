@@ -65,7 +65,8 @@ Vagrant.configure("2") do |config|
     vb.linked_clone = true
 
     # Use VBoxManage to customize the VM. For example to change memory:
-    vb.customize ["modifyvm", :id, "--memory", "8192", "--cpus", "2"]
+    #vb.customize ["modifyvm", :id, "--memory", "8192", "--cpus", "2"]
+    vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "2"]
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
     vb.customize ["modifyvm", :id, "--vram", "32"]
@@ -101,7 +102,7 @@ Vagrant.configure("2") do |config|
 
   # config.vm.provision "shell", path: "install/changetogerman.sh"
 
-  # config.vm.provision "shell", path: "install/gnome.sh"
+  config.vm.provision "shell", path: "install/gnome.sh"
 
   config.vm.provision "shell", path: "install/sapinst.sh"
 
